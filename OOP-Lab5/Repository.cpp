@@ -67,3 +67,9 @@ void Garage::show_all() {
 	for (int i = 0; i < this->cars.size(); i++)
 		cout << this->cars[i] << "\n";
 }
+
+Garage::~Garage() {
+	this->cars.clear();
+	this->cars.shrink_to_fit();
+	std::cout << "Garag Destructor called e" << endl;
+}

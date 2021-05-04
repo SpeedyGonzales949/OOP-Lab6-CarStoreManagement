@@ -17,5 +17,6 @@ namespace Controller {
 		vector<Domain::Car> filter_by_km(double km);
 		vector<Domain::Car> filter_by_year(int year, int choice);
 		vector<Domain::Car> sort_by_price();
+	
 	};
 }

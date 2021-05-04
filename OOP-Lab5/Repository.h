@@ -16,7 +16,7 @@ namespace Repository {
 	void update_Car(Domain::Car car,int index);
 	void show_all();
 	vector<Domain::Car> get_all();
-
+	~Garage();
 	};
 	
 }
