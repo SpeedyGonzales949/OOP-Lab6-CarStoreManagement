@@ -1,0 +1,33 @@
+#pragma once
+#include "Client.h"
+namespace UI {
+	class Ui{
+	private:
+		ClientController::Client client;
+	public:
+		Ui(ClientController::Client& client);
+		void start();
+		void show_ClientMenu();
+		void pick_option();
+
+		void run_ClientSide();
+		//void run_ManagerSide();
+
+		void option0();
+		void option1();
+		void option2();
+		void option3();
+		void option4();
+		void option5();
+		void option6();
+		void option7();
+		void option8();
+		//void option9();
+
+		
+	};
+	void read_integers(int& x, string input);
+	void read_double(double& x, string input);
+	void show_contents(vector<Domain::Car> cars);
+}
+

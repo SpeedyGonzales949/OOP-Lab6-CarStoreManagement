@@ -63,7 +63,7 @@ void Garage::update_Car(Domain::Car car, int index) {
 	this->cars[index] = car;
 }
 
-void Garage::show_all() {
+void Garage::show_all() { 
 	for (int i = 0; i < this->cars.size(); i++)
 		cout << this->cars[i] << "\n";
 }
@@ -71,5 +71,4 @@ void Garage::show_all() {
 Garage::~Garage() {
 	this->cars.clear();
 	this->cars.shrink_to_fit();
-	std::cout << "Garag Destructor called e" << endl;
 }

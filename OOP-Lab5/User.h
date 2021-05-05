@@ -8,6 +8,7 @@ namespace Controller {
 	{
 	protected:
 		Garage repo;
+		
 	public:
 		User();
 		virtual void add_Car(Domain::Car& e)=0;
@@ -17,6 +18,12 @@ namespace Controller {
 		vector<Domain::Car> filter_by_km(double km);
 		vector<Domain::Car> filter_by_year(int year, int choice);
 		vector<Domain::Car> sort_by_price();
+		vector<Domain::Car> get_repo();
+
+		void show_repo();
+		
+		
 	
 	};
+	
 }

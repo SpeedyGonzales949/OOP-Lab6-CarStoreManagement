@@ -38,6 +38,22 @@ vector<Domain::Car> User::sort_by_price()
 	return sortedList;
 }
 
+void User::show_repo()
+{	
+	int ct = 1;
+	for (Domain::Car car : this->repo.get_all()) {
+		cout << ct << "." << car << endl;
+		ct++;
+	}
+		
+	
+}
+
+vector<Domain::Car> User::get_repo() {
+	return this->repo.get_all();
+}
+
+
 vector<Domain::Car> User::filter_by_km(double km)
 {
 	vector<Domain::Car> new_list = this->repo.get_all();

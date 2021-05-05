@@ -134,7 +134,6 @@ void testClientController() {
 		assert(false);
 
 	test = client.filter_by_year(2001, -1);
-	for_each(test.begin(), test.end(), [](Domain::Car& car1) {cout << car1 << endl; });
 	test.erase(remove_if(test.begin(), test.end(), [](Domain::Car& car) {
 		if (car.get_registration_year() >= 2001)
 			return true;
