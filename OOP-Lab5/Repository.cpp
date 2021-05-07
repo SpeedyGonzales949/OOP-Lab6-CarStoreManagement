@@ -72,3 +72,21 @@ Garage::~Garage() {
 	this->cars.clear();
 	this->cars.shrink_to_fit();
 }
+
+void Garage::update_km(Domain::Car x, double km)
+{
+	for (int i = 0; i < this->cars.size(); i++)
+		if (this->cars[i] == x)
+		{
+			this->cars[i].set_km(km);
+		}
+}
+
+void Repository::Garage::update_price(Domain::Car x, double price)
+{
+	for (int i = 0; i < this->cars.size(); i++)
+		if (this->cars[i] == x)
+		{
+			this->cars[i].set_price(price);
+		}
+}

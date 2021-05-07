@@ -1,9 +1,9 @@
 #include "UI.h"
 using namespace UI;
 
-Ui::Ui(ClientController::Client& client): client(client){}
+Ui::Ui(ClientController::Client& client,ManagerController::Manager& manager): client(client),manager(manager){}
 
-void Ui::show_ClientMenu() {
+void Ui::show_ManagerMenu() {
 		system("CLS");
 		cout << "Enter your option: \n";
 		cout << "0. Exit Menu" << "\n";
@@ -14,9 +14,23 @@ void Ui::show_ClientMenu() {
 		cout << "5. Filter by km " << "\n";
 		cout << "6. Filter by registration year " << "\n";
 		cout << "7.  Sort by price " << "\n";
-		cout << "8. List favorites cars " << "\n";
+		cout << "8. Update car price" << "\n";
+		cout << "9. Update car km" << "\n";
 }
 
+void Ui::show_ClientMenu() {
+	system("CLS");
+	cout << "Enter your option: \n";
+	cout << "0. Exit Menu" << "\n";
+	cout << "1. Add new car " << "\n";
+	cout << "2. Delete car " << "\n";
+	cout << "3. Search by model " << "\n";
+	cout << "4. Search by brand " << "\n";
+	cout << "5. Filter by km " << "\n";
+	cout << "6. Filter by registration year " << "\n";
+	cout << "7.  Sort by price " << "\n";
+	cout << "8. List favorites cars " << "\n";
+}
 void Ui::pick_option() {
 	char option;
 	do
@@ -34,7 +48,7 @@ void Ui::pick_option() {
 	case '6': {system("CLS"); option6(); system("pause"); break; }
 	case '7': {system("CLS"); option7(); system("pause"); break; }
 	case '8': {system("CLS"); option8(); system("pause"); break; }
-	//case '9': {system("CLS"); option9(); system("pause"); break; }
+	case '9': {system("CLS"); option9(); system("pause"); break; }
 	}
 }
 
@@ -43,13 +57,50 @@ void Ui::option0() {
 }
 
 void Ui::option1() {
-	this->client.show_repo();
-	int option;
-	read_integers(option, "Which car would you like to add to your favorites list? CarNr:");
-	if (option > 0 && option <= this->client.sort_by_price().size())
-		this->client.add_Car(this->client.get_repo().at(option-1));
+	if(this->choice==2)
+	{
+		this->client.show_repo();
+		int option;
+		read_integers(option, "Which car would you like to add to your favorites list? CarNr:");
+		if (option > 0 && option <= this->client.sort_by_price().size())
+			this->client.add_Car(this->client.get_repo().at(option - 1));
+		else
+			cout << "!!Error 404!!" << endl;
+	}
 	else
-		cout << "!!Error 404!!" << endl;
+	{
+		string input, brand, model, fuel;
+		double km, price, performance;
+		int year;
+
+		cout << "Enter the new car specifications:\n";
+		cout << "Brand: ";
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		getline(cin, brand);
+		cout << "\n";
+		cout << "Model: ";
+		
+		getline(cin, model);
+		cout << "\n";
+		cout << "Fuel type: ";
+
+		getline(cin, fuel);
+		cout << "\n";
+		UI::read_double(km, "Km: ");
+		cout << "\n";
+		input = "Registration year: ";
+		UI::read_integers(year, input);
+		cout << "\n";
+		input = "Performance: ";
+		UI::read_double(performance, input);
+		cout << "\n";
+		input = "New price: ";
+		UI::read_double(price, input);
+		cout << "\n";
+		Domain::Car new_car = Domain::Car(model, brand, fuel, km, price, performance, year);
+		this->manager.add_Car(new_car);
+	}
+	
 }
 
 void Ui::option2() {
@@ -141,11 +192,58 @@ void Ui::option7() {
 	show_contents(list);
 }
 void Ui::option8() {
-	cout << "<3:";
-	vector<Domain::Car>list = this->client.get_favorites();
-	show_contents(list);
+	if(this->choice==2)
+	{
+		cout << "<3:";
+		vector<Domain::Car>list = this->client.get_favorites();
+		show_contents(list);
+	}
+	else
+	{
+		string input;
+		int position;
+		double price;
+		this->manager.show_repo();
+		cout << "\n";
+		input = "Enter the number of the car you want to update: ";
+		UI::read_integers(position, input);
+		if (position > 0 && position <= this->manager.get_repo().size())
+		{
+			Domain::Car updated = this->manager.get_repo()[position - 1];
+			input = "New Price: ";
+			UI::read_double(price, input);
+			this->manager.update_price(updated, price);
+			cout << "\n";
+		}
+		else
+		{
+			cout << "Position not valid.\n";
+		}
+	}
+	
 }
 
+void Ui::option9()
+{
+	int position;
+	double km;
+	this->manager.show_repo();
+	cout << "\n";
+	string input = "Enter the number of the car you want to update: ";
+	UI::read_integers(position, input);
+	if (position > 0 && position <= this->manager.get_repo().size())
+	{
+		Domain::Car updated = this->manager.get_repo()[position - 1];
+		input = "New Km: ";
+		UI::read_double(km, input);
+		this->manager.update_price(updated, km);
+		cout << "\n";
+	}
+	else
+	{
+		cout << "Position not valid.\n";
+	}
+}
 
 void Ui::start() {
 	cout << "Press 1 for Manager or 2 for Client" << endl;
@@ -153,20 +251,27 @@ void Ui::start() {
 	do{
 		cout << "Option: ", cin >> option;
 	} while (option != '1' && option!='2');
-
+	this->choice = option;
 	if (option == '2')
 		run_ClientSide();
 	else
-		cout << "Wrong option \n";
+		run_ManagerSide();
 
 }
 
 void Ui::run_ClientSide() {
-	while (1) {
+	while (true) {
 		show_ClientMenu();
 		pick_option();
 	}
 		
+}
+
+void Ui::run_ManagerSide() {
+	while (true) {
+		show_ManagerMenu();
+		pick_option();
+	}
 }
 
 

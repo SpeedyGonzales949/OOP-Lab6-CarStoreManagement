@@ -1,17 +1,21 @@
 #pragma once
 #include "Client.h"
+#include "Manager.h"
 namespace UI {
 	class Ui{
 	private:
 		ClientController::Client client;
+		ManagerController::Manager manager;
+		char choice;
 	public:
-		Ui(ClientController::Client& client);
+		Ui(ClientController::Client& client,ManagerController::Manager& manager);
 		void start();
 		void show_ClientMenu();
+		void show_ManagerMenu();
 		void pick_option();
 
 		void run_ClientSide();
-		//void run_ManagerSide();
+		void run_ManagerSide();
 
 		void option0();
 		void option1();
@@ -22,7 +26,7 @@ namespace UI {
 		void option6();
 		void option7();
 		void option8();
-		//void option9();
+		void option9();
 
 		
 	};

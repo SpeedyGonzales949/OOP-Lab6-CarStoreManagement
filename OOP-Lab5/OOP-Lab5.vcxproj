@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="Domain.h" />
+    <ClInclude Include="Manager.h" />
     <ClInclude Include="Repository.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="UI.h" />
@@ -30,6 +31,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Domain.cpp" />
+    <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Repository.cpp" />
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="UI.cpp" />

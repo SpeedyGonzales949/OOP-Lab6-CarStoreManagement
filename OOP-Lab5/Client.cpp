@@ -2,9 +2,9 @@
 using namespace ClientController;
 #include <algorithm>
 
-Client::Client(Repository::Garage& repo){
+Client::Client(shared_ptr<Repository::Garage> repo){
 	this->repo = repo;
-}	
+}
 
 void Client::delete_Car(Domain::Car car) 
 {

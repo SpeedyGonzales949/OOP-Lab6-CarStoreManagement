@@ -43,7 +43,7 @@ void testRepository() {
 }
 
 void testClientController() {
-	Repository::Garage garage = Repository::Garage("date.txt");
+	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
 	ClientController::Client client = ClientController::Client(garage);
 	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000);
 

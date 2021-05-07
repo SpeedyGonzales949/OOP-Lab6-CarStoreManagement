@@ -4,9 +4,10 @@
 int main() {
 	TestAll();
 
-	Repository::Garage garage = Repository::Garage("date.txt");
+	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
 	ClientController::Client client = ClientController::Client(garage);
-	UI::Ui ui = UI::Ui(client);
+	ManagerController::Manager manager = ManagerController::Manager(garage);
+	UI::Ui ui = UI::Ui(client,manager);
 	ui.start();
 	std::cout << "Good Job!";
 	return 0;

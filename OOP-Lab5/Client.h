@@ -7,7 +7,7 @@ namespace ClientController {
 	private:
 		vector<Domain::Car> favorites;
 	public:
-		Client(Repository::Garage& repo);
+		Client(shared_ptr<Repository::Garage> repo);
 		void add_Car(Domain::Car& car) override ;
 		void delete_Car(Domain::Car car) override;
 		vector<Domain::Car> get_favorites();
