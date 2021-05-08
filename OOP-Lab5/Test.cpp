@@ -148,26 +148,111 @@ void testClientController() {
 
 }
 
+void testManagerController() {
+	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
+	ManagerController::Manager manager = ManagerController::Manager(garage);
+	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000);
+	int size = manager.get_repo().size();
+	manager.add_Car(car);
+	assert(manager.get_repo().size() == size + 1);
 
+	manager.delete_Car(car);
+	assert(manager.get_repo().size() == size);
 
+	vector<Domain::Car> test;
 
+	test = manager.search_brand("BMW");
+	test.erase(remove_if(test.begin(), test.end(), [](Domain::Car& car) {
+		if (car.get_brand() == "BMW")
+			return true;
+		else
+			return false;
+		}), test.end());
+	if (test.empty())
+		assert(true);
+	else
+		assert(false);
 
-/*
-	car.set_brand("Audi");
-	car.set_model("Q3");
-	car.set_fuel("Benzin");
-	car.set_km(i);
-	car.set_performamce(i * 2);
-	car.set_price(i * i);
-	car.set_registration_year(2000 - i);
-*/
+	test = manager.search_model("Octavia");
+	test.erase(remove_if(test.begin(), test.end(), [](Domain::Car& car) {
+		if (car.get_model() == "Octavia")
+			return true;
+		else
+			return false;
+		}), test.end());
+	if (test.empty())
+		assert(true);
+	else
+		assert(false);
 
+	test = manager.sort_by_price();
+	if (is_sorted(test.begin(), test.end(), [](Domain::Car& car1, Domain::Car& car2) {
+		if (car1.get_price() < car2.get_price())
+			return true;
+		else
+			return false;
+		}))
+		assert(true);
+	else
+		assert(false);
 
+	test = manager.search_model("Octavia");
+	test.erase(remove_if(test.begin(), test.end(), [](Domain::Car& car) {
+		if (car.get_model() == "Octavia")
+			return true;
+		else
+			return false;
+		}), test.end());
+	if (test.empty())
+		assert(true);
+	else
+		assert(false);
+
+	test = manager.filter_by_km(500);
+	test.erase(remove_if(test.begin(), test.end(), [](Domain::Car& car) {
+		if (car.get_km() <= 500)
+			return true;
+		else
+			return false;
+		}), test.end());
+	if (test.empty())
+		assert(true);
+	else
+		assert(false);
+
+	test = manager.filter_by_year(2001, 1);
+
+	test.erase(remove_if(test.begin(), test.end(), [](Domain::Car& car) {
+		if (car.get_km() <= 2001)
+			return true;
+		else
+			return false;
+		}), test.end());
+	if (test.empty())
+		assert(true);
+	else
+		assert(false);
+
+	test = manager.filter_by_year(2001, -1);
+	test.erase(remove_if(test.begin(), test.end(), [](Domain::Car& car) {
+		if (car.get_registration_year() >= 2001)
+			return true;
+		else
+			return false;
+		}), test.end());
+
+	if (test.empty())
+		assert(true);
+	else
+		assert(false);
+
+}
 
 
 
 
 void TestAll() {
 	testRepository();
+	testManagerController();
 	testClientController();
 }
