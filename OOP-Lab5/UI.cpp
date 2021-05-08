@@ -1,21 +1,36 @@
 #include "UI.h"
+#include <iostream>
+#include <fstream>
 using namespace UI;
 
-Ui::Ui(ClientController::Client& client,ManagerController::Manager& manager): client(client),manager(manager){}
+Ui::Ui(ClientController::Client& client, ManagerController::Manager& manager, string file) : client(client), manager(manager), credentials_file(file) {}
 
+bool Ui::login(string username, string  password)
+{
+	ifstream f;
+	f.open(credentials_file);
+	string f_username, f_password;
+	while (f >> f_username >> f_password)
+	{
+		if (username == f_username && password == f_password)
+			return true;
+	}
+	return false;
+
+}
 void Ui::show_ManagerMenu() {
-		system("CLS");
-		cout << "Enter your option: \n";
-		cout << "0. Exit Menu" << "\n";
-		cout << "1. Add new car " << "\n";
-		cout << "2. Delete car " << "\n";
-		cout << "3. Search by model " << "\n";
-		cout << "4. Search by brand " << "\n";
-		cout << "5. Filter by km " << "\n";
-		cout << "6. Filter by registration year " << "\n";
-		cout << "7.  Sort by price " << "\n";
-		cout << "8. Update car price" << "\n";
-		cout << "9. Update car km" << "\n";
+	system("CLS");
+	cout << "Enter your option: \n";
+	cout << "0. Exit Menu" << "\n";
+	cout << "1. Add new car " << "\n";
+	cout << "2. Delete car " << "\n";
+	cout << "3. Search by model " << "\n";
+	cout << "4. Search by brand " << "\n";
+	cout << "5. Filter by km " << "\n";
+	cout << "6. Filter by registration year " << "\n";
+	cout << "7.  Sort by price " << "\n";
+	cout << "8. Update car price" << "\n";
+	cout << "9. Update car km" << "\n";
 }
 
 void Ui::show_ClientMenu() {
@@ -35,7 +50,7 @@ void Ui::pick_option() {
 	char option;
 	do
 	{
-	cout << "Option: ", cin >> option;
+		cout << "Option: ", cin >> option;
 	} while (option < '0' || option>'9');
 
 	switch (option) {
@@ -57,7 +72,7 @@ void Ui::option0() {
 }
 
 void Ui::option1() {
-	if(this->choice==2)
+	if (this->choice == 2)
 	{
 		this->client.show_repo();
 		int option;
@@ -79,7 +94,7 @@ void Ui::option1() {
 		getline(cin, brand);
 		cout << "\n";
 		cout << "Model: ";
-		
+
 		getline(cin, model);
 		cout << "\n";
 		cout << "Fuel type: ";
@@ -100,20 +115,49 @@ void Ui::option1() {
 		Domain::Car new_car = Domain::Car(model, brand, fuel, km, price, performance, year);
 		this->manager.add_Car(new_car);
 	}
-	
+
 }
 
 void Ui::option2() {
-	for (Domain::Car car : this->client.get_favorites()) {
-		cout<< car << endl;
+	if (choice == 2) {
+		for (Domain::Car car : this->client.get_favorites()) {
+			cout << car << endl;
+		}
+		int option;
+		read_integers(option, "Which car would you like to delete to your favorites list? CarNr:");
+		if (option > 0 && option <= this->client.get_favorites().size())
+			this->client.delete_Car(this->client.get_favorites().at(option - 1));
+		else
+			cout << "!!Error 404!!" << endl;
 	}
-	int option;
-	read_integers(option, "Which car would you like to delete to your favorites list? CarNr:");
-	if (option > 0 && option <= this->client.get_favorites().size())
-		this->client.delete_Car(this->client.get_favorites().at(option-1));
 	else
-		cout << "!!Error 404!!" << endl;
-	
+	{
+		string input;
+		system("CLS");
+		int position;
+		char answear;
+		this->manager.show_repo();
+		cout << "\n";
+		input = "Enter the number of the car you want to delete: ";
+		UI::read_integers(position, input);
+
+		if (position > 0 && position <= this->manager.get_repo().size())
+		{
+			cout << "Are you sure you want to delete the car " << position << " ? (Y/N): ";
+			cin >> answear;
+			if (answear == 'Y')
+			{
+				Domain::Car deleted = this->manager.get_repo()[position - 1];
+				this->manager.delete_Car(deleted);
+				cout << "\n";
+			}
+		}
+		else
+		{
+			cout << "Position not valid.\n";
+		}
+	}
+
 }
 
 void Ui::option3() {
@@ -131,7 +175,7 @@ void Ui::option3() {
 		for (int i = 0; i < list.size(); i++)
 			cout << list[i] << "\n";
 	}
-	
+
 }
 void Ui::option4() {
 	string brand;
@@ -175,7 +219,7 @@ void Ui::option6() {
 	cout << "\n";
 	UI::read_integers(choice, "Choice (-1 for reverse filtering):");
 	cout << "FILTERED LIST: \n";
-	vector<Domain::Car> list=this->client.filter_by_year(year,choice);
+	vector<Domain::Car> list = this->client.filter_by_year(year, choice);
 	if (list.size() == 0)
 	{
 		cout << "There is no car with that specification";
@@ -192,7 +236,7 @@ void Ui::option7() {
 	show_contents(list);
 }
 void Ui::option8() {
-	if(this->choice==2)
+	if (this->choice == 2)
 	{
 		cout << "<3:";
 		vector<Domain::Car>list = this->client.get_favorites();
@@ -220,7 +264,7 @@ void Ui::option8() {
 			cout << "Position not valid.\n";
 		}
 	}
-	
+
 }
 
 void Ui::option9()
@@ -236,7 +280,7 @@ void Ui::option9()
 		Domain::Car updated = this->manager.get_repo()[position - 1];
 		input = "New Km: ";
 		UI::read_double(km, input);
-		this->manager.update_price(updated, km);
+		this->manager.update_km(updated, km);
 		cout << "\n";
 	}
 	else
@@ -248,9 +292,9 @@ void Ui::option9()
 void Ui::start() {
 	cout << "Press 1 for Manager or 2 for Client" << endl;
 	char option;
-	do{
+	do {
 		cout << "Option: ", cin >> option;
-	} while (option != '1' && option!='2');
+	} while (option != '1' && option != '2');
 	this->choice = option;
 	if (option == '2')
 		run_ClientSide();
@@ -264,14 +308,43 @@ void Ui::run_ClientSide() {
 		show_ClientMenu();
 		pick_option();
 	}
-		
+
 }
 
+
 void Ui::run_ManagerSide() {
-	while (true) {
-		show_ManagerMenu();
-		pick_option();
-	}
+	string username, password;
+	int ok = 1;
+	do {
+		system("cls");
+
+		cout << "-------- Authentication--------" << endl;
+		cout << "Username: ";
+		cin >> username;
+		cout << "Password: ";
+		cin >> password;
+		char op;
+		if (login(username, password) == true)
+		{
+			ok = 1;
+			while (true) {
+				show_ManagerMenu();
+				pick_option();
+			}
+		}
+		else
+		{
+			cout << "Incorrect username or password! Choose an option:" << endl;
+			cout << "1. Try again" << endl;
+			cout << "0. Exit" << endl;
+			cin >> op;
+			if (op != '1')
+				exit(0);
+			else
+				ok = 0;
+		}
+
+	} while (ok == 0);
 }
 
 
