@@ -14,6 +14,5 @@ namespace ManagerController {
 		void delete_Car(Domain::Car car) override;
 		void update_km(Domain::Car x, double km);
 		void update_price(Domain::Car x, double price);
-		void update_Car(Domain::Car car, int index);
 	};
 }
