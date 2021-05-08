@@ -2,13 +2,15 @@
 #include "Client.h"
 #include "Manager.h"
 namespace UI {
-	class Ui{
+	class Ui {
 	private:
 		ClientController::Client client;
 		ManagerController::Manager manager;
+		string credentials_file;
 		char choice;
 	public:
-		Ui(ClientController::Client& client,ManagerController::Manager& manager);
+		Ui(ClientController::Client& client, ManagerController::Manager& manager, string file);
+		bool login(string username, string password);
 		void start();
 		void show_ClientMenu();
 		void show_ManagerMenu();
@@ -28,10 +30,9 @@ namespace UI {
 		void option8();
 		void option9();
 
-		
+
 	};
 	void read_integers(int& x, string input);
 	void read_double(double& x, string input);
 	void show_contents(vector<Domain::Car> cars);
 }
-
