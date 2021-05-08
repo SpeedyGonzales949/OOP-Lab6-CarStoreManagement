@@ -33,10 +33,9 @@ namespace Domain {
 		bool operator==(Car other);
 		bool operator<(Car other);
 		friend std::ostream& operator<<(std::ostream& os, Car& car) {
-			os << car.get_brand() << " " << car.get_model() << " " << car.get_fuel() << " " << car.get_performance() << " " << car.get_km()<<" "<< car.get_price()<<" "<<car.get_registration_year();
+			os << car.get_brand() << " | " << car.get_model() << " | " << car.get_fuel() << " | CP: " << car.get_performance() << " | Km: " << car.get_km() <<" | Price: "<< car.get_price()<<" | Year: " <<car.get_registration_year();
 			return os;
-		}
-
+		};
 		
 		
 		
