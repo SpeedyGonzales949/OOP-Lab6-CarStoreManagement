@@ -24,8 +24,3 @@ void Manager::update_price(Domain::Car x, double price)
 {
 	this->repo->update_price(x, price);
 }
-
-void Manager::update_Car(Domain::Car car, int index)
-{
-	this->repo->update_Car(car, index);
-}
