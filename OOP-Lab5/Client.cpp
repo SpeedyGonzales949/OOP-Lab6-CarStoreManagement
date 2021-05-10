@@ -2,16 +2,16 @@
 using namespace ClientController;
 #include <algorithm>
 
-Client::Client(shared_ptr<Repository::Garage> repo){
+Client::Client(shared_ptr<Repository::Garage> repo) {
 	this->repo = repo;
 }
 
-void Client::delete_Car(Domain::Car car) 
+void Client::delete_Car(Domain::Car car)
 {
-	this->favorites.erase(remove(this->favorites.begin(), this->favorites.end(), car),this->favorites.end());
+	this->favorites.erase(remove(this->favorites.begin(), this->favorites.end(), car), this->favorites.end());
 }
 
-void Client::add_Car(Domain::Car& car) 
+void Client::add_Car(Domain::Car& car)
 {
 	this->favorites.push_back(car);
 }

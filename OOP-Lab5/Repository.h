@@ -10,15 +10,26 @@ namespace Repository {
 	private:
 		vector<Domain::Car> cars;
 	public:
-	Garage(string file="date.txt");
-	void add_Car(Domain::Car car);
-	void delete_Car(Domain::Car car);
-	void update_Car(Domain::Car car,int index);
-	void update_km(Domain::Car x, double km);
-	void update_price(Domain::Car x, double price);
-	void show_all();
-	vector<Domain::Car> get_all();
-	~Garage();
+
+		//Constructor
+		Garage(string file = "date.txt");
+		//add
+		void add_Car(Domain::Car car);
+		//delete
+		void delete_Car(Domain::Car car);
+		//update km
+		void update_km(Domain::Car x, double km);
+		//update price
+		void update_price(Domain::Car x, double price);
+		//update a car
+		void update_Car(Domain::Car car, int index);
+		//show all cars
+		void show_all();
+
+		//return vector of cars
+		vector<Domain::Car> get_all();
+		//Destructor
+		~Garage();
 	};
-	
+
 }

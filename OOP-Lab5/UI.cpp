@@ -46,7 +46,27 @@ void Ui::show_ClientMenu() {
 	cout << "7.  Sort by price " << "\n";
 	cout << "8. List favorites cars " << "\n";
 }
-void Ui::pick_option() {
+void Ui::pick_option_client() {
+	char option;
+	do
+	{
+		cout << "Option: ", cin >> option;
+	} while (option < '0' || option>'8');
+
+	switch (option) {
+	case '0': {system("CLS"); option0(); system("pause"); break; }
+	case '1': {system("CLS"); option1(); system("pause"); break; }
+	case '2': {system("CLS"); option2(); system("pause"); break; }
+	case '3': {system("CLS"); option3(); system("pause"); break; }
+	case '4': {system("CLS"); option4(); system("pause"); break; }
+	case '5': {system("CLS"); option5(); system("pause"); break; }
+	case '6': {system("CLS"); option6(); system("pause"); break; }
+	case '7': {system("CLS"); option7(); system("pause"); break; }
+	case '8': {system("CLS"); option8(); system("pause"); break; }
+	}
+}
+
+void Ui::pick_option_manager() {
 	char option;
 	do
 	{
@@ -72,7 +92,7 @@ void Ui::option0() {
 }
 
 void Ui::option1() {
-	if (this->choice == 2)
+	if (this->choice == '2')
 	{
 		this->client.show_repo();
 		int option;
@@ -119,7 +139,7 @@ void Ui::option1() {
 }
 
 void Ui::option2() {
-	if (choice == 2) {
+	if (choice == '2') {
 		for (Domain::Car car : this->client.get_favorites()) {
 			cout << car << endl;
 		}
@@ -236,7 +256,7 @@ void Ui::option7() {
 	show_contents(list);
 }
 void Ui::option8() {
-	if (this->choice == 2)
+	if (this->choice == '2')
 	{
 		cout << "<3:";
 		vector<Domain::Car>list = this->client.get_favorites();
@@ -306,7 +326,7 @@ void Ui::start() {
 void Ui::run_ClientSide() {
 	while (true) {
 		show_ClientMenu();
-		pick_option();
+		pick_option_client();
 	}
 
 }
@@ -329,7 +349,7 @@ void Ui::run_ManagerSide() {
 			ok = 1;
 			while (true) {
 				show_ManagerMenu();
-				pick_option();
+				pick_option_manager();
 			}
 		}
 		else

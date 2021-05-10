@@ -4,7 +4,7 @@
 using namespace Repository;
 Garage::Garage(std::string file)
 {
-	
+
 	ifstream f;
 	f.open(file);
 
@@ -14,7 +14,7 @@ Garage::Garage(std::string file)
 
 	while (!f.eof())
 	{
-		
+
 		//first 2 fields (name, origin) are separated by ":" (they may have multiple words separarted by space)
 		std::string x, y;
 		std::string f_model, f_brand;
@@ -49,21 +49,21 @@ vector<Domain::Car> Garage::get_all() {
 	return this->cars;
 }
 
-void Garage::delete_Car(Domain::Car car){
+void Garage::delete_Car(Domain::Car car) {
 
-	this->cars.erase(remove(this->cars.begin(), this->cars.end(), car),this->cars.end());
+	this->cars.erase(remove(this->cars.begin(), this->cars.end(), car), this->cars.end());
 
 }
 
 void Garage::add_Car(Domain::Car car) {
 	this->cars.push_back(car);
-} 
+}
 
 void Garage::update_Car(Domain::Car car, int index) {
 	this->cars[index] = car;
 }
 
-void Garage::show_all() { 
+void Garage::show_all() {
 	for (int i = 0; i < this->cars.size(); i++)
 		cout << this->cars[i] << "\n";
 }

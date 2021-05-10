@@ -3,7 +3,7 @@
 using namespace Controller;
 
 
-User::User(){}
+User::User() {}
 vector<Domain::Car> User::search_brand(string brand)
 {
 	vector<Domain::Car> new_list = this->repo->get_all();
@@ -39,14 +39,14 @@ vector<Domain::Car> User::sort_by_price()
 }
 
 void User::show_repo()
-{	
+{
 	int ct = 1;
 	for (Domain::Car car : this->repo->get_all()) {
 		cout << ct << "." << car << endl;
 		ct++;
 	}
-		
-	
+
+
 }
 
 vector<Domain::Car> User::get_repo() {
@@ -85,7 +85,6 @@ vector<Domain::Car> User::filter_by_year(int year, int choice)
 			else
 				return false;
 			});
-
 		sort(new_list.begin(), new_list.end(), [](Domain::Car& car1, Domain::Car& car2) {
 			if (car1.get_registration_year() < car2.get_registration_year())
 				return true;
@@ -112,4 +111,3 @@ vector<Domain::Car> User::filter_by_year(int year, int choice)
 		return_vec = new_list;
 	return return_vec;
 }
-

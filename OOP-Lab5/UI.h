@@ -9,16 +9,25 @@ namespace UI {
 		string credentials_file;
 		char choice;
 	public:
+		//Constructor
 		Ui(ClientController::Client& client, ManagerController::Manager& manager, string file);
+		//verify if login data is stored as manager accounts
 		bool login(string username, string password);
+		//start app, contains two functions (client side and manager side)
 		void start();
+		//show Client menu options
 		void show_ClientMenu();
+		//show Manager menu options
 		void show_ManagerMenu();
-		void pick_option();
-
+		//pick function option for client
+		void pick_option_client();
+		//pick function option for manager
+		void pick_option_manager();
+		//client menu containing all functions
 		void run_ClientSide();
+		//manager menu containing login verify and then all functions
 		void run_ManagerSide();
-
+		//each function for each menu
 		void option0();
 		void option1();
 		void option2();
@@ -32,7 +41,10 @@ namespace UI {
 
 
 	};
+	//check if introduced data is integer
 	void read_integers(int& x, string input);
+	//check if introduced data is double
 	void read_double(double& x, string input);
+	//show all cars
 	void show_contents(vector<Domain::Car> cars);
 }
