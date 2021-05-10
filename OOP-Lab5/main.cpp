@@ -4,7 +4,7 @@ using namespace std;
 #include "Ui.h"
 #include <iostream>
 int main() {
-	TestAll();
+	//TestAll();
 
 	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
 	ClientController::Client client = ClientController::Client(garage);

@@ -15,6 +15,7 @@ namespace ClientController {
 		void delete_Car(Domain::Car car) override;
 		//getter
 		vector<Domain::Car> get_favorites();
+		~Client() { cout << "Client Destructor" << "\n"; };
 
 	};
 }

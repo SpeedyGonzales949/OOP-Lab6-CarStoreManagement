@@ -30,6 +30,7 @@ namespace Controller {
 		vector<Domain::Car> get_repo();
 		//show list of cars
 		void show_repo();
+		virtual ~User()=0;
 
 
 
