@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Crud_Repo.h" />
     <ClInclude Include="Domain.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Repository.h" />
