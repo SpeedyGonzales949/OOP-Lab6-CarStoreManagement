@@ -132,7 +132,8 @@ void Ui::option1() {
 		input = "New price: ";
 		UI::read_double(price, input);
 		cout << "\n";
-		Domain::Car new_car = Domain::Car(model, brand, fuel, km, price, performance, year);
+		int new_id = this->manager.get_repo().size();
+		Domain::Car new_car = Domain::Car(model, brand, fuel, km, price, performance, year, new_id);
 		this->manager.add_Car(new_car);
 	}
 
@@ -177,7 +178,6 @@ void Ui::option2() {
 			cout << "Position not valid.\n";
 		}
 	}
-
 }
 
 void Ui::option3() {

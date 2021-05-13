@@ -8,9 +8,10 @@ namespace Domain {
 		std::string model, brand, fuel;
 		double km, price, performance;
 		int registration_year;
+		int id;
 	public:
 		//Constructor
-		Car(std::string  model, std::string brand, std::string fuel, double km, double price, double performance, int year );
+		Car(std::string  model, std::string brand, std::string fuel, double km, double price, double performance, int year, int id );
 		Car(const Car& car);
 		//Setters
 		void set_model(std::string model);
@@ -20,6 +21,7 @@ namespace Domain {
 		void set_km(double km);
 		void set_price(double price);
 		void set_performamce(double performance);
+		void set_id(int id);
 		//Getters
 		std::string get_model();
 		std::string get_brand();
@@ -28,6 +30,7 @@ namespace Domain {
 		double get_km();
 		double get_price();
 		double get_performance();
+		int get_id();
 
 		//Operators
 		bool operator==(Car other);
