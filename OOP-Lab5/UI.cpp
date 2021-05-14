@@ -1,9 +1,10 @@
 #include "UI.h"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 using namespace UI;
 
-Ui::Ui(ClientController::Client& client, ManagerController::Manager& manager, string file) : client(client), manager(manager), credentials_file(file) {}
+Ui::Ui(ManagerController::Manager& manager, string file) : client(client), manager(manager), credentials_file(file) {}
 
 bool Ui::login(string username, string  password)
 {
@@ -18,6 +19,40 @@ bool Ui::login(string username, string  password)
 	return false;
 
 }
+void Ui::sign_User(string username,string password)
+{
+	
+	ClientController::Client new_client = ClientController::Client(this->manager.get_full_repo(), username, password);
+	this->clients.push_back(new_client);
+	cout << this->clients.size();
+	
+}
+
+bool Ui::login_User(string username, string password)
+{
+	
+	auto it=std::find_if(this->clients.begin(), this->clients.end(), [username, password](ClientController::Client& client)
+		{ 
+			if (client.get_password() == password && client.get_username() == username)
+			{
+				return true;
+			}
+			
+			return false;
+		});
+	
+	
+	if (it!=this->clients.end())
+	{
+		this->client = *it;
+		return true;
+	}
+	return false;
+
+}
+
+
+
 void Ui::show_ManagerMenu() {
 	system("CLS");
 	cout << "Enter your option: \n";
@@ -324,6 +359,47 @@ void Ui::start() {
 }
 
 void Ui::run_ClientSide() {
+	bool end = true;
+	do
+	{
+		string option;
+		bool invalid = true;
+		do
+		{
+			
+			cout << "1 for login, 2 for sign up:";
+			cin >> option;
+			cout << endl;
+			if (option == "1" || option == "2")
+				invalid = false;
+			else
+			cout << "Invalid option! Try again!";
+		}
+		while (invalid);
+
+		
+
+		string user, pass;
+		cout << "Enter Username:";
+		cin >> user;
+		cout << "Enter Password:";
+		cin >> pass;
+
+		if (option == "2")
+		{
+			this->sign_User(user, pass);
+			this->update_database();
+		}
+			
+		else
+		{
+			if (this->login_User(user, pass))
+				end = false;
+		}
+			
+	}
+	while (end);
+	
 	while (true) {
 		show_ClientMenu();
 		pick_option_client();
@@ -403,4 +479,17 @@ void UI::read_double(double& x, string msg) {
 void UI::show_contents(vector<Domain::Car> cars) {
 	for (Domain::Car car : cars)
 		cout << car << endl;
+}
+
+void Ui::update_database()
+{
+	fstream file;
+	file.open("clients-data.csv",ios::out);
+	for(ClientController::Client client:this->clients)
+	{
+		file << client.get_username() << "," << client.get_password() << "\n";
+	}
+	file.close();
+	
+	
 }
