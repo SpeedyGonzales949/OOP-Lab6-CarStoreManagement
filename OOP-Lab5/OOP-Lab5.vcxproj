@@ -41,6 +41,9 @@
   <ItemGroup>
     <Text Include="date.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="clients-data.csv" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

@@ -16,10 +16,7 @@ vector<Domain::Car> User::search_brand(string brand)
 	return new_list;
 }
 
-User::~User()
-{
-	cout << "User Destructor" << "\n";
-}
+User::~User(){}
 vector<Domain::Car> User::search_model(string model)
 {
 	vector<Domain::Car> new_list = this->repo->get_all();

@@ -4,9 +4,8 @@
 int main() {
 	//TestAll();
 	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
-	ClientController::Client client = ClientController::Client(garage);
 	ManagerController::Manager manager = ManagerController::Manager(garage);
-	UI::Ui ui = UI::Ui(client, manager, "Login.txt");
+	UI::Ui ui = UI::Ui(manager, "Login.txt");
 	ui.start();
 	return 0;
 }
