@@ -16,10 +16,7 @@ vector<Domain::Car> User::search_brand(string brand)
 	return new_list;
 }
 
-User::~User()
-{
-	cout << "User Destructor" << "\n";
-}
+User::~User(){}
 vector<Domain::Car> User::search_model(string model)
 {
 	vector<Domain::Car> new_list = this->repo->get_all();
@@ -54,7 +51,7 @@ void User::show_repo()
 }
 
 vector<Domain::Car> User::get_repo() {
-	return this->repo->get_all();
+return this->repo->get_all();
 }
 
 
@@ -114,4 +111,16 @@ vector<Domain::Car> User::filter_by_year(int year, int choice)
 	else
 		return_vec = new_list;
 	return return_vec;
+}
+
+vector<Domain::Car> User::search_id(int id)
+{
+	vector<Domain::Car> new_list = this->repo->get_all();
+	new_list.erase(remove_if(new_list.begin(), new_list.end(),
+		[id](Domain::Car car) {
+			if (car.get_id() != id)
+				return true;
+			return false;
+		}), new_list.end());
+	return new_list;
 }

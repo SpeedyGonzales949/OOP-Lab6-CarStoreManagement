@@ -93,3 +93,7 @@ void Repository::Garage::update_price(Domain::Car x, double price)
 			this->cars[i].set_price(price);
 		}
 }
+int Garage::assign_id()
+{
+	return this->id++;
+}

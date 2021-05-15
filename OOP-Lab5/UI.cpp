@@ -1,9 +1,10 @@
 #include "UI.h"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 using namespace UI;
 
-Ui::Ui(ClientController::Client& client, ManagerController::Manager& manager, string file) : client(client), manager(manager), credentials_file(file) {}
+Ui::Ui(ManagerController::Manager& manager, string file) : client(client), manager(manager), credentials_file(file) {}
 
 bool Ui::login(string username, string  password)
 {
@@ -18,6 +19,42 @@ bool Ui::login(string username, string  password)
 	return false;
 
 }
+void Ui::sign_User(string username,string password)
+{
+	
+	ClientController::Client new_client = ClientController::Client(this->manager.get_full_repo(), username, password);
+	this->clients.push_back(new_client);
+
+}
+
+
+
+bool Ui::login_User(string username, string password)
+{
+	
+	auto it=std::find_if(this->clients.begin(), this->clients.end(), [username, password](ClientController::Client& client)
+		{ 
+			if (client.get_password() == password && client.get_username() == username)
+			{
+				return true;
+			}
+			
+			return false;
+		});
+	
+	
+	if (it!=this->clients.end())
+	{
+		this->client = *it;
+		return true;
+	}
+	cout << "Invalid credentials" << endl;
+	return false;
+
+}
+
+
+
 void Ui::show_ManagerMenu() {
 	system("CLS");
 	cout << "Enter your option: \n";
@@ -99,7 +136,11 @@ void Ui::option1() {
 		int option;
 		read_integers(option, "Which car would you like to add to your favorites list? CarNr:");
 		if (option > 0 && option <= this->client.sort_by_price().size())
+		{
 			this->client.add_Car(this->client.get_repo().at(option - 1));
+			this->update_database();
+		}
+			
 		else
 			cout << "!!Error 404!!" << endl;
 	}
@@ -148,7 +189,11 @@ void Ui::option2() {
 		int option;
 		read_integers(option, "Which car would you like to delete to your favorites list? CarNr:");
 		if (option > 0 && option <= this->client.get_favorites().size())
+		{
 			this->client.delete_Car(this->client.get_favorites().at(option - 1));
+			this->update_database();
+		}
+			
 		else
 			cout << "!!Error 404!!" << endl;
 	}
@@ -311,6 +356,7 @@ void Ui::option9()
 }
 
 void Ui::start() {
+	this->read_database();
 	cout << "Press 1 for Manager or 2 for Client" << endl;
 	char option;
 	do {
@@ -325,6 +371,54 @@ void Ui::start() {
 }
 
 void Ui::run_ClientSide() {
+	system("CLS");
+	bool end = true;
+	do
+	{
+		string option;
+		bool invalid = true;
+		system("cls");
+		do
+		{
+			
+			cout << "1 for login, 2 for sign up:";
+			cin >> option;
+			cout << endl;
+			if (option == "1" || option == "2")
+				invalid = false;
+			else
+			cout << "Invalid option! Try again!";
+		}
+		while (invalid);
+
+		
+		system("cls");
+		if(option=="1")
+			cout << "-------- Log In --------" << endl;
+		else
+			cout << "-------- Sign Up --------" << endl;
+		string user, pass;
+		cout << "Enter Username:";
+		cin >> user;
+		cout << "Enter Password:";
+		cin >> pass;
+
+		if (option == "2")
+		{
+			this->sign_User(user, pass);
+			this->update_database();
+		}
+			
+		else
+		{
+			if (this->login_User(user, pass))
+				end = false;
+		}
+		
+			
+	}
+	while (end);
+	
 	while (true) {
 		show_ClientMenu();
 		pick_option_client();
@@ -404,4 +498,51 @@ void UI::read_double(double& x, string msg) {
 void UI::show_contents(vector<Domain::Car> cars) {
 	for (Domain::Car car : cars)
 		cout << car << endl;
+}
+
+void Ui::update_database()
+{
+	fstream file;
+	file.open("clients-data.csv",ios::out);
+	for(ClientController::Client client:this->clients)
+	{
+		file << client.get_username() << "," << client.get_password() << ",";
+		for (Domain::Car car : this->client.get_favorites())
+			file << car.get_id() << ",";
+		file << "\n";
+	}
+	file.close();
+	
+}
+
+void Ui::read_database()
+{
+	fstream file;
+	file.open("clients-data.csv", ios::in);
+	vector<string>row;
+	string line, word;
+
+	while(!file.eof())
+	{
+		row.clear();
+		getline(file, line);
+		stringstream s(line);
+		while(getline(s,word,','))
+		{
+			row.push_back(word);
+		}
+
+		 ClientController::Client new_client = ClientController::Client(this->manager.get_full_repo(), row[0], row[1]);
+		for(int i=2;i<row.size();i++)
+		{
+			
+			Domain::Car new_car = new_client.search_id(stoi(row[i]))[0];
+			new_client.add_Car(new_car);
+		}
+		this->clients.push_back(new_client);
+		
+		
+	}
+	file.close();
+	
 }
