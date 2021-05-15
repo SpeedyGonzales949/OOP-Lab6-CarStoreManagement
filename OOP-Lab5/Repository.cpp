@@ -38,7 +38,7 @@ Garage::Garage(std::string file)
 		}
 		//date, amount, price are separated only by one space each
 		f >> f_year >> f_km >> f_fuel >> f_performance >> f_price;
-		Domain::Car car(f_model, f_brand, f_fuel, f_km, f_price, f_performance, f_year);
+		Domain::Car car(f_model, f_brand, f_fuel, f_km, f_price, f_performance, f_year,this->assign_id());
 		this->cars.push_back(car); //add the product in the list
 	}
 	f.close();
@@ -89,4 +89,8 @@ void Repository::Garage::update_price(Domain::Car x, double price)
 		{
 			this->cars[i].set_price(price);
 		}
+}
+int Garage::assign_id()
+{
+	return this->id++;
 }

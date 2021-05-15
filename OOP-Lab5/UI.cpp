@@ -24,9 +24,10 @@ void Ui::sign_User(string username,string password)
 	
 	ClientController::Client new_client = ClientController::Client(this->manager.get_full_repo(), username, password);
 	this->clients.push_back(new_client);
-	cout << this->clients.size();
-	
+
 }
+
+
 
 bool Ui::login_User(string username, string password)
 {
@@ -47,6 +48,7 @@ bool Ui::login_User(string username, string password)
 		this->client = *it;
 		return true;
 	}
+	cout << "Invalid credentials" << endl;
 	return false;
 
 }
@@ -133,7 +135,11 @@ void Ui::option1() {
 		int option;
 		read_integers(option, "Which car would you like to add to your favorites list? CarNr:");
 		if (option > 0 && option <= this->client.sort_by_price().size())
+		{
 			this->client.add_Car(this->client.get_repo().at(option - 1));
+			this->update_database();
+		}
+			
 		else
 			cout << "!!Error 404!!" << endl;
 	}
@@ -182,7 +188,11 @@ void Ui::option2() {
 		int option;
 		read_integers(option, "Which car would you like to delete to your favorites list? CarNr:");
 		if (option > 0 && option <= this->client.get_favorites().size())
+		{
 			this->client.delete_Car(this->client.get_favorites().at(option - 1));
+			this->update_database();
+		}
+			
 		else
 			cout << "!!Error 404!!" << endl;
 	}
@@ -345,6 +355,7 @@ void Ui::option9()
 }
 
 void Ui::start() {
+	this->read_database();
 	cout << "Press 1 for Manager or 2 for Client" << endl;
 	char option;
 	do {
@@ -359,11 +370,13 @@ void Ui::start() {
 }
 
 void Ui::run_ClientSide() {
+	system("CLS");
 	bool end = true;
 	do
 	{
 		string option;
 		bool invalid = true;
+		system("cls");
 		do
 		{
 			
@@ -378,7 +391,11 @@ void Ui::run_ClientSide() {
 		while (invalid);
 
 		
-
+		system("cls");
+		if(option=="1")
+			cout << "-------- Log In --------" << endl;
+		else
+			cout << "-------- Sign Up --------" << endl;
 		string user, pass;
 		cout << "Enter Username:";
 		cin >> user;
@@ -396,6 +413,7 @@ void Ui::run_ClientSide() {
 			if (this->login_User(user, pass))
 				end = false;
 		}
+		
 			
 	}
 	while (end);
@@ -487,9 +505,43 @@ void Ui::update_database()
 	file.open("clients-data.csv",ios::out);
 	for(ClientController::Client client:this->clients)
 	{
-		file << client.get_username() << "," << client.get_password() << "\n";
+		file << client.get_username() << "," << client.get_password() << ",";
+		for (Domain::Car car : this->client.get_favorites())
+			file << car.get_id() << ",";
+		file << "\n";
 	}
 	file.close();
 	
+}
+
+void Ui::read_database()
+{
+	fstream file;
+	file.open("clients-data.csv", ios::in);
+	vector<string>row;
+	string line, word;
+
+	while(!file.eof())
+	{
+		row.clear();
+		getline(file, line);
+		stringstream s(line);
+		while(getline(s,word,','))
+		{
+			row.push_back(word);
+		}
+
+		 ClientController::Client new_client = ClientController::Client(this->manager.get_full_repo(), row[0], row[1]);
+		for(int i=2;i<row.size();i++)
+		{
+			
+			Domain::Car new_car = new_client.search_id(stoi(row[i]))[0];
+			new_client.add_Car(new_car);
+		}
+		this->clients.push_back(new_client);
+		
+		
+	}
+	file.close();
 	
 }

@@ -10,10 +10,13 @@ namespace Repository {
 	class Garage:public CrudRepository<Domain::Car>  {
 	private:
 		vector<Domain::Car> cars;
+		int id = 0;
 	public:
 
 		//Constructor
 		Garage(string file = "date.txt");
+		//assigns id to the car
+		int assign_id();
 		//add
 		void add_Car(Domain::Car car) override;
 		//delete
