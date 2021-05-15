@@ -20,5 +20,7 @@ namespace ManagerController {
 		//update price from given car with new price
 		void update_price(Domain::Car x, double price);
 		~Manager() { cout << "Manager Destructor" << "\n"; };
+		shared_ptr<Repository::Garage> get_full_repo()const;
+	
 	};
 }

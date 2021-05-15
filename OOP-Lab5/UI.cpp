@@ -88,6 +88,7 @@ void Ui::pick_option_manager() {
 }
 
 void Ui::option0() {
+	this->manager.get_full_repo()->saveToFile();
 	exit(0);
 }
 

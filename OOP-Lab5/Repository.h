@@ -12,7 +12,8 @@ namespace Repository {
 	public:
 
 		//Constructor
-		Garage(string file = "date.txt");
+		Garage(string file = "date.csv");
+		void saveToFile();
 		//add
 		void add_Car(Domain::Car car);
 		//delete
@@ -25,7 +26,6 @@ namespace Repository {
 		void update_Car(Domain::Car car, int index);
 		//show all cars
 		void show_all();
-
 		//return vector of cars
 		vector<Domain::Car> get_all();
 		//Destructor

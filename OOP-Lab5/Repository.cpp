@@ -4,45 +4,48 @@
 using namespace Repository;
 Garage::Garage(std::string file)
 {
-
+	//0,Modell,Marke,Erstzulassungsjahr,Kilometer,Preis,Leistung,Treibstoff
 	ifstream f;
-	f.open(file);
+	f.open(file, ios::in);
 
-	int f_year;
-	double f_km, f_price, f_performance;
-	std::string f_fuel;
+	vector<string> row;
+	string line, word, field;
+	
+	while (f>>line) {
+		row.clear();
 
-	while (!f.eof())
-	{
-
-		//first 2 fields (name, origin) are separated by ":" (they may have multiple words separarted by space)
-		std::string x, y;
-		std::string f_model, f_brand;
-		f >> x;
-		while (x != ":")
+		//getline(f, line);
+		stringstream s(line);
+		while (getline(s, word, ','))
 		{
-			f_model += x;
-
-			f >> x;
-			if (x != ":")
-				f_model += " ";
+			row.push_back(word);
 		}
-		f >> y;
-		while (y != ":")
-		{
-			f_brand += y;
 
-			f >> y;
-			if (y != ":")
-				f_brand += " ";
-		}
-		//date, amount, price are separated only by one space each
-		f >> f_year >> f_km >> f_fuel >> f_performance >> f_price;
-		Domain::Car car(f_model, f_brand, f_fuel, f_km, f_price, f_performance, f_year);
-		this->cars.push_back(car); //add the product in the list
+		Domain::Car new_car(row[1],row[2],row[7], stod(row[4]), stod(row[5]), stod(row[6]), stoi(row[3]), stoi(row[0]));
+		this->cars.push_back(new_car);
 	}
 	f.close();
+}
 
+void Garage::saveToFile()
+{
+	ofstream g;
+	string file = "date.csv";
+	g.open("date.csv", ios::out);
+
+	for (int i = 0; i < this->cars.size(); i++)
+	{
+		g << this->cars[i].get_id() << ',' <<
+			this->cars[i].get_brand() << ',' <<
+			this->cars[i].get_model() << ',' <<
+			this->cars[i].get_registration_year() << ',' <<
+			this->cars[i].get_km() << ',' <<
+			this->cars[i].get_price() << ',' <<
+			this->cars[i].get_performance() << ',' <<
+			this->cars[i].get_fuel() << endl;
+	}
+
+	g.close();
 }
 
 vector<Domain::Car> Garage::get_all() {

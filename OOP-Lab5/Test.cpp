@@ -7,7 +7,7 @@ void testRepository() {
 	Repository::Garage garage = Repository::Garage("date.txt");
 
 	for (int i = 0; i < 100; i++) {
-		auto car = Domain::Car("X6", "BMW", "Disel", i * 2, i * 3, 200 + i, 2000 + i);
+		auto car = Domain::Car("X6", "BMW", "Disel", i * 2, i * 3, 200 + i, 2000 + i,i);
 		garage.add_Car(car);
 		if (garage.get_all().back() == car)
 			assert(true);
@@ -16,7 +16,7 @@ void testRepository() {
 	}
 
 	for (int i = 99; i >= 0; i--) {
-		auto car = Domain::Car("X6", "BMW", "Disel", i * 2, i * 3, 200 + i, 2000 + i);
+		auto car = Domain::Car("X6", "BMW", "Disel", i * 2, i * 3, 200 + i, 2000 + i,i);
 		if (garage.get_all().back() == car)
 			assert(true);
 		else {
@@ -43,7 +43,7 @@ void testRepository() {
 void testClientController() {
 	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
 	ClientController::Client client = ClientController::Client(garage);
-	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000);
+	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000,0);
 
 	client.add_Car(car);
 	if (client.get_favorites()[0] == car)
@@ -149,7 +149,7 @@ void testClientController() {
 void testManagerController() {
 	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
 	ManagerController::Manager manager = ManagerController::Manager(garage);
-	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000);
+	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000,0);
 	int size = manager.get_repo().size();
 	manager.add_Car(car);
 	assert(manager.get_repo().size() == size + 1);

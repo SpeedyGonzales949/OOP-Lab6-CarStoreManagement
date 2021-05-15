@@ -24,3 +24,7 @@ void Manager::update_price(Domain::Car x, double price)
 {
 	this->repo->update_price(x, price);
 }
+shared_ptr<Repository::Garage> ManagerController::Manager::get_full_repo()  const
+{
+	return this->repo;
+}
