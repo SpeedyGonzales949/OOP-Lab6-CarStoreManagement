@@ -23,7 +23,7 @@ namespace ManagerController {
 		shared_ptr<Repository::Garage> get_full_repo() const;
 		
 		~Manager() { cout << "Manager Destructor" << "\n"; };
-		shared_ptr<Repository::Garage> get_full_repo()const;
+
 	
 	};
 }

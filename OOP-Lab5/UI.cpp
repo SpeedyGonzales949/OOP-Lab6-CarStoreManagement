@@ -387,7 +387,7 @@ void Ui::run_ClientSide() {
 			if (option == "1" || option == "2")
 				invalid = false;
 			else
-			cout << "Invalid option! Try again!";
+				cout << "Invalid option! Try again!" << endl;
 		}
 		while (invalid);
 
@@ -407,12 +407,17 @@ void Ui::run_ClientSide() {
 		{
 			this->sign_User(user, pass);
 			this->update_database();
+			system("pause");
 		}
 			
 		else
 		{
 			if (this->login_User(user, pass))
 				end = false;
+			else
+			{
+				system("pause");
+			}
 		}
 		
 			
@@ -507,7 +512,7 @@ void Ui::update_database()
 	for(ClientController::Client client:this->clients)
 	{
 		file << client.get_username() << "," << client.get_password() << ",";
-		for (Domain::Car car : this->client.get_favorites())
+		for (Domain::Car car : client.get_favorites())
 			file << car.get_id() << ",";
 		file << "\n";
 	}
@@ -526,20 +531,24 @@ void Ui::read_database()
 	{
 		row.clear();
 		getline(file, line);
-		stringstream s(line);
-		while(getline(s,word,','))
+		if(!line.empty())
 		{
-			row.push_back(word);
-		}
+			stringstream s(line);
+			while (getline(s, word, ','))
+			{
+				row.push_back(word);
+			}
 
-		 ClientController::Client new_client = ClientController::Client(this->manager.get_full_repo(), row[0], row[1]);
-		for(int i=2;i<row.size();i++)
-		{
-			
-			Domain::Car new_car = new_client.search_id(stoi(row[i]))[0];
-			new_client.add_Car(new_car);
+			ClientController::Client new_client = ClientController::Client(this->manager.get_full_repo(), row[0], row[1]);
+			for (int i = 2; i < row.size(); i++)
+			{
+
+				Domain::Car new_car = new_client.search_id(stoi(row[i]))[0];
+				new_client.add_Car(new_car);
+			}
+			this->clients.push_back(new_client);
+
 		}
-		this->clients.push_back(new_client);
 		
 		
 	}
