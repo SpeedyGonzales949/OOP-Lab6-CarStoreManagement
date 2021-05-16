@@ -1,6 +1,6 @@
 #include "Domain.h"
 using namespace Domain;
-Car::Car(std::string  model, std::string brand, std::string fuel, double km, double price, double performance, int year, int id)
+Car::Car(std::string  model, std::string brand, std::string fuel, double km, double price, double performance, int year, int id, int state)
 {	
 	this->model = model;
 	this->brand = brand;
@@ -10,6 +10,7 @@ Car::Car(std::string  model, std::string brand, std::string fuel, double km, dou
 	this->price=price;
 	this->performance = performance;
 	this->id = id;
+	this->state = state;
 }
 
 Car::Car(const Car& car) {
@@ -21,6 +22,7 @@ Car::Car(const Car& car) {
 	this->price = car.price;
 	this->performance = car.performance;
 	this->id = car.id;
+	this->state = car.state;
 }
 void Car::set_model(std::string model)
 {
@@ -60,6 +62,10 @@ void Car::set_id(int id)
 {
 	this->id = id;
 }
+void Car::set_state(int state)
+{
+	this->state = state;
+}
 std::string Car::get_model() {
 	return this->model;
 }
@@ -90,6 +96,11 @@ int Car::get_registration_year() {
 int Car::get_id()
 {
 	return this->id;
+}
+
+int Car::get_state()
+{
+	return this->state;
 }
 bool Car::operator==(Car other)
 {

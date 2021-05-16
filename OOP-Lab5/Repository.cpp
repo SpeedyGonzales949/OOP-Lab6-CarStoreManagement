@@ -20,8 +20,8 @@ Garage::Garage(std::string file)
 		{
 			row.push_back(word);
 		}
-
-		Domain::Car new_car(row[1],row[2],row[7], stod(row[4]), stod(row[5]), stod(row[6]), stoi(row[3]), stoi(row[0]));
+		//cout << row[8] << stoi(row[8]);
+		Domain::Car new_car(row[1],row[2],row[7], stod(row[4]), stod(row[5]), stod(row[6]), stoi(row[3]), stoi(row[0]), stoi(row[8]));
 		this->cars.push_back(new_car);
 	}
 	f.close();
@@ -42,7 +42,8 @@ void Garage::saveToFile()
 			this->cars[i].get_km() << ',' <<
 			this->cars[i].get_price() << ',' <<
 			this->cars[i].get_performance() << ',' <<
-			this->cars[i].get_fuel() << endl;
+			this->cars[i].get_fuel() << ',' <<
+			this->cars[i].get_state() << endl;
 	}
 
 	g.close();
@@ -54,8 +55,8 @@ vector<Domain::Car> Garage::get_all() {
 
 void Garage::delete_Car(Domain::Car car) {
 
-	this->cars.erase(remove(this->cars.begin(), this->cars.end(), car), this->cars.end());
-
+	//this->cars.erase(remove(this->cars.begin(), this->cars.end(), car), this->cars.end());
+	car.set_state(0);
 }
 
 void Garage::add_Car(Domain::Car car) {

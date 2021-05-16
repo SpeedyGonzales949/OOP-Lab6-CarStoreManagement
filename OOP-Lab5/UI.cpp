@@ -28,7 +28,6 @@ void Ui::sign_User(string username,string password)
 }
 
 
-
 bool Ui::login_User(string username, string password)
 {
 	
@@ -58,7 +57,7 @@ bool Ui::login_User(string username, string password)
 void Ui::show_ManagerMenu() {
 	system("CLS");
 	cout << "Enter your option: \n";
-	cout << "0. Exit Menu" << "\n";
+	cout << "0. Log Out" << "\n";
 	cout << "1. Add new car " << "\n";
 	cout << "2. Delete car " << "\n";
 	cout << "3. Search by model " << "\n";
@@ -73,7 +72,7 @@ void Ui::show_ManagerMenu() {
 void Ui::show_ClientMenu() {
 	system("CLS");
 	cout << "Enter your option: \n";
-	cout << "0. Exit Menu" << "\n";
+	cout << "0. Log Out" << "\n";
 	cout << "1. Add new car " << "\n";
 	cout << "2. Delete car " << "\n";
 	cout << "3. Search by model " << "\n";
@@ -91,7 +90,7 @@ void Ui::pick_option_client() {
 	} while (option < '0' || option>'8');
 
 	switch (option) {
-	case '0': {system("CLS"); option0(); system("pause"); break; }
+	case '0': {system("CLS");  this->choice = 0; break; }
 	case '1': {system("CLS"); option1(); system("pause"); break; }
 	case '2': {system("CLS"); option2(); system("pause"); break; }
 	case '3': {system("CLS"); option3(); system("pause"); break; }
@@ -111,7 +110,7 @@ void Ui::pick_option_manager() {
 	} while (option < '0' || option>'9');
 
 	switch (option) {
-	case '0': {system("CLS"); option0(); system("pause"); break; }
+	case '0': {system("CLS"); this->choice = 0; break; }
 	case '1': {system("CLS"); option1(); system("pause"); break; }
 	case '2': {system("CLS"); option2(); system("pause"); break; }
 	case '3': {system("CLS"); option3(); system("pause"); break; }
@@ -123,12 +122,12 @@ void Ui::pick_option_manager() {
 	case '9': {system("CLS"); option9(); system("pause"); break; }
 	}
 }
-
+/*
 void Ui::option0() {
-	this->manager.get_full_repo()->saveToFile();
+	
 	exit(0);
 }
-
+*/
 void Ui::option1() {
 	if (this->choice == '2')
 	{
@@ -175,7 +174,7 @@ void Ui::option1() {
 		UI::read_double(price, input);
 		cout << "\n";
 		int new_id = this->manager.get_repo().size();
-		Domain::Car new_car = Domain::Car(model, brand, fuel, km, price, performance, year, new_id);
+		Domain::Car new_car = Domain::Car(model, brand, fuel, km, price, performance, year, new_id,1);
 		this->manager.add_Car(new_car);
 	}
 
@@ -231,7 +230,11 @@ void Ui::option3() {
 	cout << "Searched Model: ";
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	getline(cin, model);
-	vector<Domain::Car> list = this->client.search_model(model);
+	vector<Domain::Car> list;
+	if(this->choice=='2')
+		list = this->client.search_model(model);
+	else
+		list = this->manager.search_model(model);
 	if (list.size() == 0)
 	{
 		cout << "The searched model was not found ";
@@ -248,7 +251,15 @@ void Ui::option4() {
 	cout << "Searched Brand: ";
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	getline(cin, brand);
-	vector<Domain::Car> list = this->client.search_brand(brand);
+	vector<Domain::Car> list;
+	if (this->choice == '2')
+	{
+		 list = this->client.search_brand(brand);
+	}
+	else
+	{
+		 list = this->manager.search_brand(brand);
+	}
 	if (list.size() == 0)
 	{
 		cout << "The searched model was not found ";
@@ -266,7 +277,11 @@ void Ui::option5() {
 	UI::read_double(km, input);
 	cout << "\n";
 	cout << "FILTERED LIST: \n";
-	vector<Domain::Car> list = this->client.filter_by_km(km);
+	vector<Domain::Car> list;
+	if (this->choice == '2')
+		this->client.filter_by_km(km);
+	else
+		this->manager.filter_by_km(km);
 	if (list.size() == 0)
 	{
 		cout << "Km too low";
@@ -285,7 +300,11 @@ void Ui::option6() {
 	cout << "\n";
 	UI::read_integers(choice, "Choice (-1 for reverse filtering):");
 	cout << "FILTERED LIST: \n";
-	vector<Domain::Car> list = this->client.filter_by_year(year, choice);
+	vector<Domain::Car> list;
+	if(this->choice=='2')
+		list=this->client.filter_by_year(year, choice);
+	else
+		list= this->manager.filter_by_year(year, choice);
 	if (list.size() == 0)
 	{
 		cout << "There is no car with that specification";
@@ -298,7 +317,11 @@ void Ui::option6() {
 
 void Ui::option7() {
 	cout << "SORTED LIST BY PRICE: \n";
-	vector<Domain::Car> list = this->client.sort_by_price();
+	vector<Domain::Car> list;
+	if(this->choice=='2')
+		list= this->client.sort_by_price();
+	else
+		list = this->manager.sort_by_price();
 	show_contents(list);
 }
 void Ui::option8() {
@@ -356,18 +379,34 @@ void Ui::option9()
 }
 
 void Ui::start() {
-	this->read_database();
-	cout << "Press 1 for Manager or 2 for Client" << endl;
+	
+	
 	char option;
-	do {
-		cout << "Option: ", cin >> option;
-	} while (option != '1' && option != '2');
-	this->choice = option;
-	if (option == '2')
-		run_ClientSide();
-	else
-		run_ManagerSide();
-
+	do 
+	{
+		this->read_database();
+		cout << "Press: " << endl;
+		cout <<" -------- 1 - Manager --------" << endl;
+		cout <<" -------- 2 - Client --------" << endl;
+		cout <<" -------- 0 - Exit App --------" << endl;
+		do {
+			cout << "Option: ", cin >> option;
+		} while (option != '1' && option != '2' && option !='0');
+		this->choice = option;
+		switch (option) {
+		case '1':
+		{	run_ManagerSide();
+		break;
+		}
+		case '2':
+		{	run_ClientSide();
+		break;
+		}
+		case'0':
+			exit(0);
+		}
+	} while (option != 0);
+	//exit(0);
 }
 
 void Ui::run_ClientSide() {
@@ -381,7 +420,9 @@ void Ui::run_ClientSide() {
 		do
 		{
 			
-			cout << "1 for login, 2 for sign up:";
+			cout << "Press: " << endl;
+			cout << "-------- 1 - Login --------" << endl;
+			cout<< "-------- 2 - Create new account --------";
 			cin >> option;
 			cout << endl;
 			if (option == "1" || option == "2")
@@ -424,7 +465,7 @@ void Ui::run_ClientSide() {
 	}
 	while (end);
 	
-	while (true) {
+	while (this->choice!=0) {
 		show_ClientMenu();
 		pick_option_client();
 	}
@@ -447,10 +488,12 @@ void Ui::run_ManagerSide() {
 		if (login(username, password) == true)
 		{
 			ok = 1;
-			while (true) {
+			while (this->choice!=0) {
 				show_ManagerMenu();
 				pick_option_manager();
 			}
+			if (this->choice == 0)
+				ok = 1;
 		}
 		else
 		{
@@ -459,7 +502,7 @@ void Ui::run_ManagerSide() {
 			cout << "0. Exit" << endl;
 			cin >> op;
 			if (op != '1')
-				exit(0);
+				ok = 1;
 			else
 				ok = 0;
 		}
