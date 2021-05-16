@@ -26,7 +26,6 @@ namespace Controller {
 		vector<Domain::Car> filter_by_year(int year, int choice);
 		//get a sorted list of cars, by price 
 		vector<Domain::Car> sort_by_price();
-
 		//return the car with the specified id
 		vector<Domain::Car> search_id(int id);
 		//getter

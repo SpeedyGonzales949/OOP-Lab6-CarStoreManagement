@@ -27,6 +27,15 @@ void Ui::sign_User(string username,string password)
 
 }
 
+bool Ui::validate_username(string username)
+{
+	for(int i=0;i<this->clients.size();i++)
+	{
+		if (this->clients[i].get_username() == username)
+			return false;
+	}
+	return true;
+}
 
 
 bool Ui::login_User(string username, string password)
@@ -405,9 +414,18 @@ void Ui::run_ClientSide() {
 
 		if (option == "2")
 		{
-			this->sign_User(user, pass);
-			this->update_database();
+			if(this->validate_username(user))
+			{
+				this->sign_User(user, pass);
+				this->update_database();
+				
+			}
+			else
+			{
+				cout << "Username already exists! Plsease try again!" << endl;
+			}
 			system("pause");
+			
 		}
 			
 		else
