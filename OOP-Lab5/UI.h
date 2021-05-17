@@ -32,6 +32,8 @@ namespace UI {
 		bool login_User(string username,string password);
 		//user signs up into the app
 		void sign_User(string username,string password);
+		//check if username already exists in the database
+		bool validate_username(string username);
 
 		//reads clientdata from file.csv
 		void read_database();
