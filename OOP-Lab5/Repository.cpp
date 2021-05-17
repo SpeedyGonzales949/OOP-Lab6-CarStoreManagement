@@ -53,10 +53,15 @@ vector<Domain::Car> Garage::get_all() {
 	return this->cars;
 }
 
-void Garage::delete_Car(Domain::Car car) {
-
-	//this->cars.erase(remove(this->cars.begin(), this->cars.end(), car), this->cars.end());
-	car.set_state(0);
+void Garage::delete_Car(Domain::Car& car) {
+	for(int i=0;i<this->get_all().size();i++)
+	{
+		if(this->get_all()[i]==car)
+		{
+			cout << "aici";
+			this->get_all()[i].set_state(0);
+		}
+	}
 }
 
 void Garage::add_Car(Domain::Car car) {
