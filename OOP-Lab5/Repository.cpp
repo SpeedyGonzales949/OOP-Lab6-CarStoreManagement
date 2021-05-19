@@ -56,7 +56,14 @@ vector<Domain::Car> Garage::get_all() {
 void Garage::delete_Car(Domain::Car car) {
 
 	//this->cars.erase(remove(this->cars.begin(), this->cars.end(), car), this->cars.end());
-	car.set_state(0);
+	
+	for (int i = 0; i < this->cars.size(); i++)
+	{
+		if (this->cars[i] == car) {
+			this->cars[i].set_state();
+		}
+	}
+	
 }
 
 void Garage::add_Car(Domain::Car car) {

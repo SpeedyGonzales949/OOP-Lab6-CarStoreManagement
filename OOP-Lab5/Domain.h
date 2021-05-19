@@ -23,7 +23,7 @@ namespace Domain {
 		void set_price(double price);
 		void set_performamce(double performance);
 		void set_id(int id);
-		void set_state(int state);
+		void set_state();
 		//Getters
 		std::string get_model();
 		std::string get_brand();

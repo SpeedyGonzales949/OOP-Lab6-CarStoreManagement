@@ -62,9 +62,9 @@ void Car::set_id(int id)
 {
 	this->id = id;
 }
-void Car::set_state(int state)
+void Car::set_state()
 {
-	this->state = state;
+	this->state = 0;
 }
 std::string Car::get_model() {
 	return this->model;
