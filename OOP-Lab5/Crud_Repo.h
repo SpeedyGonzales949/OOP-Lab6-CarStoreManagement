@@ -6,7 +6,7 @@ class CrudRepository
 {
 public:
 	virtual void add_Car(E e) = 0;
-	virtual void delete_Car(E& e) = 0;
+	virtual void delete_Car(E e) = 0;
 	virtual void update_km(E e, double km) = 0;
 	virtual void update_price(E e, double price) = 0;
 	virtual void update_Car(E e, int index) = 0;
