@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="date.txt" />
+    <Text Include="Login.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="date.csv" />
