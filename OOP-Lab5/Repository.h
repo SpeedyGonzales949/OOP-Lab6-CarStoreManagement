@@ -21,7 +21,7 @@ namespace Repository {
 		//add
 		void add_Car(Domain::Car car) override;
 		//delete
-		void delete_Car(Domain::Car& car) override;
+		void delete_Car(Domain::Car car) override;
 		//update km
 		void update_km(Domain::Car x, double km) override;
 		//update price
