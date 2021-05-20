@@ -24,6 +24,7 @@ Garage::Garage(std::string file)
 		Domain::Car new_car(row[1],row[2],row[7], stod(row[4]), stod(row[5]), stod(row[6]), stoi(row[3]), stoi(row[0]), stoi(row[8]));
 		this->cars.push_back(new_car);
 	}
+	this->id = stoi(row[0])+1;
 	f.close();
 }
 

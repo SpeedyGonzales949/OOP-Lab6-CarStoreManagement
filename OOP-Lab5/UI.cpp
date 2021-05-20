@@ -140,10 +140,10 @@ void Ui::option0() {
 void Ui::option1() {
 	if (this->choice == '2')
 	{
-		this->client.show_repo();
+		this->client.show_repo("client");
 		int option;
 		read_integers(option, "Which car would you like to add to your favorites list? CarNr:");
-		if (option > 0 && option <= this->client.sort_by_price().size())
+		if (option > 0 && option <= this->client.sort_by_price().size()&&this->client.get_repo()[option-1].get_state()==1)
 		{
 			this->client.add_Car(this->client.get_repo().at(option - 1));
 			this->update_database();
@@ -241,7 +241,7 @@ void Ui::option3() {
 	getline(cin, model);
 	vector<Domain::Car> list;
 	if(this->choice=='2')
-		list = this->client.search_model(model);
+		list = this->client.search_model(model,"client");
 	else
 		list = this->manager.search_model(model);
 	if (list.size() == 0)
@@ -263,7 +263,7 @@ void Ui::option4() {
 	vector<Domain::Car> list;
 	if (this->choice == '2')
 	{
-		 list = this->client.search_brand(brand);
+		 list = this->client.search_brand(brand,"client");
 	}
 	else
 	{
@@ -288,7 +288,7 @@ void Ui::option5() {
 	cout << "FILTERED LIST: \n";
 	vector<Domain::Car> list;
 	if (this->choice == '2')
-		this->client.filter_by_km(km);
+		this->client.filter_by_km(km,"client");
 	else
 		this->manager.filter_by_km(km);
 	if (list.size() == 0)
@@ -311,7 +311,7 @@ void Ui::option6() {
 	cout << "FILTERED LIST: \n";
 	vector<Domain::Car> list;
 	if(this->choice=='2')
-		list=this->client.filter_by_year(year, choice);
+		list=this->client.filter_by_year(year, choice, "client");
 	else
 		list= this->manager.filter_by_year(year, choice);
 	if (list.size() == 0)
@@ -328,7 +328,7 @@ void Ui::option7() {
 	cout << "SORTED LIST BY PRICE: \n";
 	vector<Domain::Car> list;
 	if(this->choice=='2')
-		list= this->client.sort_by_price();
+		list= this->client.sort_by_price("client");
 	else
 		list = this->manager.sort_by_price();
 	show_contents(list);
@@ -569,12 +569,28 @@ void UI::show_contents(vector<Domain::Car> cars) {
 void Ui::update_database()
 {
 	fstream file;
-	file.open("clients-data.csv",ios::out);
+	file.open("clients-data.csv");
 	for(ClientController::Client client:this->clients)
 	{
 		file << client.get_username() << "," << client.get_password() << ",";
-		for (Domain::Car car : client.get_favorites())
-			file << car.get_id() << ",";
+		if(client.get_username()==this->client.get_username()&&this->client.get_password()==client.get_password())
+		{
+			for (Domain::Car car : this->client.get_favorites())
+			{
+			
+				file << car.get_id() << ",";
+			}
+			
+		}
+		else
+		{
+			for (Domain::Car car : client.get_favorites())
+			{
+				
+				file << car.get_id() << ",";
+			}
+		}
+	
 		file << "\n";
 	}
 	file.close();

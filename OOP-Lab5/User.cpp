@@ -4,11 +4,21 @@ using namespace Controller;
 
 
 User::User() {}
-vector<Domain::Car> User::search_brand(string brand)
+vector<Domain::Car> User::search_brand(string brand,string user)
 {
 	vector<Domain::Car> new_list = this->repo->get_all();
+	if(user=="client")
+	{
+		new_list.erase(remove_if(new_list.begin(), new_list.end(),
+			[brand, user](Domain::Car car) {
+				if (car.get_brand() != brand || car.get_state()==0)
+					return true;
+				return false;
+			}), new_list.end());
+		return new_list;
+	}
 	new_list.erase(remove_if(new_list.begin(), new_list.end(),
-		[brand](Domain::Car car) {
+		[brand,user](Domain::Car car) {
 			if (car.get_brand() != brand)
 				return true;
 			return false;
@@ -17,9 +27,19 @@ vector<Domain::Car> User::search_brand(string brand)
 }
 
 User::~User(){}
-vector<Domain::Car> User::search_model(string model)
+vector<Domain::Car> User::search_model(string model, string user)
 {
 	vector<Domain::Car> new_list = this->repo->get_all();
+	if(user=="client")
+	{
+		new_list.erase(remove_if(new_list.begin(), new_list.end(),
+			[model](Domain::Car car) {
+				if (car.get_model() != model||car.get_state()==0)
+					return true;
+				return false;
+			}), new_list.end());
+		return new_list;
+	}
 	new_list.erase(remove_if(new_list.begin(), new_list.end(),
 		[model](Domain::Car car) {
 			if (car.get_model() != model)
@@ -29,9 +49,18 @@ vector<Domain::Car> User::search_model(string model)
 	return new_list;
 }
 
-vector<Domain::Car> User::sort_by_price()
+vector<Domain::Car> User::sort_by_price( string user)
 {
 	vector<Domain::Car> sortedList = this->repo->get_all();
+	if(user=="client")
+	{
+		sortedList.erase(remove_if(sortedList.begin(), sortedList.end(),
+			[](Domain::Car car) {
+				if (car.get_state()==0)
+					return true;
+				return false;
+			}), sortedList.end());
+	}
 	std::sort(sortedList.begin(), sortedList.end(), [](Domain::Car& p, Domain::Car& q) {
 		if (p.get_price() < q.get_price())
 			return true;
@@ -39,8 +68,18 @@ vector<Domain::Car> User::sort_by_price()
 	return sortedList;
 }
 
-void User::show_repo()
+void User::show_repo(string choice)
 {
+	if(choice=="client")
+	{
+		int ct = 1;
+		for (Domain::Car car : this->repo->get_all()) {
+			if(car.get_state()==1)
+				cout << ct << "." << car << endl;
+			ct++;
+		}
+		return;
+	}
 	int ct = 1;
 	for (Domain::Car car : this->repo->get_all()) {
 		cout << ct << "." << car << endl;
@@ -55,9 +94,20 @@ return this->repo->get_all();
 }
 
 
-vector<Domain::Car> User::filter_by_km(double km)
+vector<Domain::Car> User::filter_by_km(double km, string user)
 {
 	vector<Domain::Car> new_list = this->repo->get_all();
+	if(user=="client")
+	{
+		new_list.erase(remove_if(new_list.begin(), new_list.end(),
+			[km](Domain::Car car) {
+				cout << car.get_km() << " " << km;
+				if (car.get_km() > km||car.get_state()==0)
+					return true;
+				return false;
+			}), new_list.end());
+		return new_list;
+	}
 	new_list.erase(remove_if(new_list.begin(), new_list.end(),
 		[km](Domain::Car car) {
 			if (car.get_km() > km)
@@ -67,7 +117,7 @@ vector<Domain::Car> User::filter_by_km(double km)
 	return new_list;
 }
 
-vector<Domain::Car> User::filter_by_year(int year, int choice)
+vector<Domain::Car> User::filter_by_year(int year, int choice, string user)
 {
 	vector<Domain::Car>return_vec;
 	vector<Domain::Car> new_list = this->repo->get_all();
@@ -110,6 +160,15 @@ vector<Domain::Car> User::filter_by_year(int year, int choice)
 	}
 	else
 		return_vec = new_list;
+	if(user=="client")
+	{
+		return_vec.erase(remove_if(return_vec.begin(), return_vec.end(),
+			[](Domain::Car car) {
+				if (car.get_state() == 0)
+					return true;
+				return false;
+			}), return_vec.end());
+	}
 	return return_vec;
 }
 
