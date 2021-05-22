@@ -92,13 +92,14 @@ void Ui::show_ClientMenu() {
 	cout << "8. List favorites cars " << "\n";
 }
 void Ui::pick_option_client() {
-	char option;
+	string option;
+	char op;
 	do
 	{
 		cout << "Option: ", cin >> option;
-	} while (option < '0' || option>'8');
-
-	switch (option) {
+	} while (option < "0" || option>"8" || this->validate_number(option)==0);
+	op = option[0];
+	switch (op) {
 	case '0': {system("CLS");  this->choice = 0; break; }
 	case '1': {system("CLS"); option1(); system("pause"); break; }
 	case '2': {system("CLS"); option2(); system("pause"); break; }
@@ -112,13 +113,14 @@ void Ui::pick_option_client() {
 }
 
 void Ui::pick_option_manager() {
-	char option;
+	string option;
+	char op;
 	do
 	{
 		cout << "Option: ", cin >> option;
-	} while (option < '0' || option>'9');
-
-	switch (option) {
+	} while (option < "0" || option>"9" || this->validate_number(option)==0);
+	op = option[0];
+	switch (op) {
 	case '0': {system("CLS"); this->choice = 0; break; }
 	case '1': {system("CLS"); option1(); system("pause"); break; }
 	case '2': {system("CLS"); option2(); system("pause"); break; }
@@ -131,12 +133,7 @@ void Ui::pick_option_manager() {
 	case '9': {system("CLS"); option9(); system("pause"); break; }
 	}
 }
-/*
-void Ui::option0() {
-	
-	exit(0);
-}
-*/
+
 void Ui::option1() {
 	if (this->choice == '2')
 	{
@@ -388,21 +385,25 @@ void Ui::option9()
 }
 
 void Ui::start() {
-	
-	
-	char option;
-	do 
+
+
+	string option;
+	char op;
+	do
 	{
 		this->read_database();
 		cout << "Press: " << endl;
-		cout <<" -------- 1 - Manager --------" << endl;
-		cout <<" -------- 2 - Client --------" << endl;
-		cout <<" -------- 0 - Exit App --------" << endl;
+		cout << " -------- 1 - Manager --------" << endl;
+		cout << " -------- 2 - Client --------" << endl;
+		cout << " -------- 0 - Exit App --------" << endl;
 		do {
 			cout << "Option: ", cin >> option;
-		} while (option != '1' && option != '2' && option !='0');
-		this->choice = option;
-		switch (option) {
+			
+
+		} while (option != "1" && option != "2" && option != "0" && this->validate_number(option)==0);
+		op = option[0];
+		this->choice = op;
+		switch (op) {
 		case '1':
 		{	run_ManagerSide();
 		break;
@@ -411,10 +412,10 @@ void Ui::start() {
 		{	run_ClientSide();
 		break;
 		}
-		case'0':
+		case '0':
 			exit(0);
 		}
-	} while (option != 0);
+	} while (op != '0');
 	//exit(0);
 }
 
@@ -632,4 +633,13 @@ void Ui::read_database()
 	}
 	file.close();
 	
+}
+
+bool Ui::validate_number(string input) {
+	if (input.size() >1)
+		return false;
+	if (isdigit(input[0]) == false) //not a digit
+		return false;
+	
+	return true;
 }

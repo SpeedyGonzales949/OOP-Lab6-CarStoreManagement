@@ -40,6 +40,7 @@ namespace UI {
 		//stores clietdata to file.csv
 		void update_database();
 
+		bool validate_number(string input);
 		//each function for each menu
 		void option0();
 		void option1();

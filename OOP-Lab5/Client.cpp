@@ -24,8 +24,13 @@ string Client::get_password()
 }
 
 void Client::add_Car(Domain::Car& car)
-{
-	this->favorites.push_back(car);
+{	
+	bool found = false;
+	for (int i = 0; i < this->favorites.size(); i++)
+		if (this->favorites[i] == car)
+			found = true;
+	if(found==false)
+		this->favorites.push_back(car);
 }
 
 vector<Domain::Car> Client::get_favorites() {
