@@ -4,7 +4,7 @@
 #include <assert.h>
 #include <algorithm>
 void testRepository() {
-	Repository::Garage garage = Repository::Garage("date.txt");
+	Repository::Garage garage = Repository::Garage("date.csv");
 
 	for (int i = 0; i < 100; i++) {
 		auto car = Domain::Car("X6", "BMW", "Disel", i * 2, i * 3, 200 + i, 2000 + i,i,1);
@@ -13,20 +13,18 @@ void testRepository() {
 			assert(true);
 		else
 			assert(false);
-	}
-
-	for (int i = 99; i >= 0; i--) {
-		auto car = Domain::Car("X6", "BMW", "Disel", i * 2, i * 3, 200 + i, 2000 + i,i,1);
+		car.set_state();
+		garage.delete_Car(car);
 		if (garage.get_all().back() == car)
 			assert(true);
 		else {
 
 			assert(false);
 		}
-
-		garage.delete_Car(car);
-
+		
 	}
+
+
 
 	for (int i = 0; i < garage.get_all().size() - 1; i++) {
 		auto car = garage.get_all()[i + 1];
@@ -40,11 +38,12 @@ void testRepository() {
 
 }
 
+
 void testClientController() {
-	/*
-	 	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.txt"));
-	ClientController::Client client = ClientController::Client(garage);
-	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000,0);
+	
+	 	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.csv"));
+	ClientController::Client client = ClientController::Client(garage,"username","parola");
+	Domain::Car car = Domain::Car("Q3", "Audi", "Disel", 2, 3, 200, 2000,0,1);
 
 	client.add_Car(car);
 	if (client.get_favorites()[0] == car)
@@ -144,7 +143,7 @@ void testClientController() {
 		assert(true);
 	else
 		assert(false);
-	 */
+	 
 
 
 }

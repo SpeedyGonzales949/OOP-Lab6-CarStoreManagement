@@ -101,8 +101,7 @@ vector<Domain::Car> User::filter_by_km(double km, string user)
 	{
 		new_list.erase(remove_if(new_list.begin(), new_list.end(),
 			[km](Domain::Car car) {
-				cout << car.get_km() << " " << km;
-				if (car.get_km() > km||car.get_state()==0)
+				if (car.get_km() > km || car.get_state() == 0)
 					return true;
 				return false;
 			}), new_list.end());

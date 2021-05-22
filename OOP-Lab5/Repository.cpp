@@ -7,7 +7,6 @@ Garage::Garage(std::string file)
 	//0,Modell,Marke,Erstzulassungsjahr,Kilometer,Preis,Leistung,Treibstoff
 	ifstream f;
 	f.open(file, ios::in);
-
 	vector<string> row;
 	string line, word, field;
 	

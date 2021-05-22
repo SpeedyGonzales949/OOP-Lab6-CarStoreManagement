@@ -2,9 +2,8 @@
 #include "Ui.h"
 #include <iostream>
 int main() {
-	//TestAll();
+	TestAll();
 	shared_ptr<Repository::Garage> garage(new Repository::Garage("date.csv"));
-	//garage->show_all();
 	ManagerController::Manager manager = ManagerController::Manager(garage);
 	UI::Ui ui = UI::Ui(manager, "Login.txt");
 	ui.start();

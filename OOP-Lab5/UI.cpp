@@ -288,12 +288,12 @@ void Ui::option5() {
 	cout << "FILTERED LIST: \n";
 	vector<Domain::Car> list;
 	if (this->choice == '2')
-		this->client.filter_by_km(km,"client");
+		list=this->client.filter_by_km(km,"client");
 	else
-		this->manager.filter_by_km(km);
+		list=this->manager.filter_by_km(km);
 	if (list.size() == 0)
 	{
-		cout << "Km too low";
+		cout << "Km too low" << endl;
 	}
 	else
 	{
@@ -431,7 +431,8 @@ void Ui::run_ClientSide() {
 			
 			cout << "Press: " << endl;
 			cout << "-------- 1 - Login --------" << endl;
-			cout<< "-------- 2 - Create new account --------";
+			cout << "-------- 2 - Create new account --------" << endl;
+			cout << "Option:";
 			cin >> option;
 			cout << endl;
 			if (option == "1" || option == "2")
